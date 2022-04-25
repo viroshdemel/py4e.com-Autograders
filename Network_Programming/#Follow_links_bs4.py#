@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+#! -*- coding: utf-8 -*-
+"""Autograder: Following Links with BeautifulSoup
+@author: Virosh
+"""
+from bs4 import BeautifulSoup as soup
+from urllib.request import urlopen
+
+#Input and Iteration vars
+c = 1
+pos = 1
+ent_pos = int(input('Enter Position: '))
+ent_count = int(input('Enter Count: '))
+
+# Url Selection
+url = input('Select Url: ')
+if len(url) < 1: url =  'http://py4e-data.dr-chuck.net/known_by_Fikret.html'  #'http://py4e-data.dr-chuck.net/known_by_Montgomery.html'
+else: url = 'http://py4e-data.dr-chuck.net/known_by_Jaia.html'
+
+html = urlopen(url).read()
+s = soup(html, 'html.parser')
+
+while c < ent_count:
+
+    """For each individual tag found in s
+       only if pos <= ent_pos, retrieve href
+       into var then follow those links
+       until c == ent_count"""
+
+    for tag in s('a'):  # s not changing
+        if pos <= ent_pos:
+            url = tag.get('href')
+            print(c, pos, url)
+            pos = pos + 1
+            #print(pos, s)
+
+        else:
+            #print(url)
+            html = urlopen(url).read()
+            print('Retrieving url: ', url)
+            t = soup(html, 'html.parser')
+            s = ('a')
+            pos = 1
+            c = c + 1
+            if c > ent_count:
+                break
+'''
+        elif c == ent_count:
+            c = c + 1
+            continue
+        else:
+            break
+'''
+'''
+        if c == ent_count:
+            c = c + 1
+            print(c, pos ,url)
+            continue
+'''
